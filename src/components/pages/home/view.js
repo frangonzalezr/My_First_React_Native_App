@@ -1,51 +1,70 @@
-import React, {Component} from 'react'
-import {View, Text} from 'react-native'
-import styles from './styles'
-import {getHouses} from '../../../api'
+import React, {Component} from 'react';
+import {SafeAreaView, Image, Alert, FlatList, RefreshControl} from 'react-native';
+import styles from './styles';
+import {getHouses} from '../../../api';
+import {HouseCard} from '../../molecules'
+import {Actions} from 'react-native-router-flux'
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      houses: [],
+      loading: false,
+    };
+  }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            houses: []
-        }
-    }
+  componentDidMount() {
+    this._initHousesList()
+  }
 
-    async componentDidMount() {
-        // NEW WAY
-        try {
-            const getHousesRes = await getHouses()
-            console.log('getHousesRes: ', getHousesRes)
-            const houses = getHousesRes.data.records
-            this.setState({ houses: houses })
-            // this.setState({houses})
-        } catch(e) {
-            console.log('getHousesError: ', e)
-        }
-        // OLD WAY
-        // getHouses()
-        // .then((res) => {
-        //     console.log('getHouses response: ', res)
-        // })
-        // .catch((e) => {
-        //     console.log('getHouses error: ', e)
-        //     conseole.log('e.response: ', e.response)
-        // })
+  _initHousesList = async () => {
+    try {
+      this.setState({loading: true})
+      const getHousesRes = await getHouses();
+      const houses = getHousesRes.data.records;
+      this.setState({houses: houses, loading: false});
+      // this.setState({houses})
+    } catch (e) {
+      this.setState({loading: false})
+      Alert.alert('Error', 'Ha ocurrido un error')
     }
+  } 
 
-    render() {
-        console.log('this.state.houses: ', this.state.houses)
-        return(
-            <View style={styles.container}>
-                {this.state.houses.map((v, i) => (
-                    <Text key={`cell-${i}`} style={{marginVertical: 20, color: 'white'}}>
-                        { v.nombre }
-                    </Text>
-                ))}
-            </View>
-        )
-    }
+  _onHousePress = (house) => {
+    // Alert.alert('atención', 'casa pulsada')
+    Actions.push('Characters', {house, title: house.nombre})
+  }
+
+  _renderItem = ({item}) => (
+    <HouseCard house={item} onPress={this._onHousePress}/>
+    // <HouseCard house={item} onPress={(house) => this._onHousePress(house)}/>
+  )
+
+  render() {
+    console.log('this.state.houses: ', this.state.houses)
+    const {houses, loading} = this.state
+    return (
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={houses}
+          keyExtractor={(item, index) => `card-${item.id}`}
+          numColumns={2}
+          renderItem={this._renderItem}
+          refreshControl={
+            <RefreshControl 
+            tintColor = 'white'
+            refreshing={loading} 
+            onRefresh={this._initHousesList}
+            title={'Cargando...'}
+            titleColor={'white'}
+             />
+          }
+        />
+        
+      </SafeAreaView>
+    )
+  }
 }
 
 export default Home

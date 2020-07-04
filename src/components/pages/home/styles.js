@@ -1,12 +1,11 @@
-import {StyleSheet} from 'react-native'
-import colors from '../../../assets/colors'
-import { color } from 'react-native-reanimated'
+import {StyleSheet} from 'react-native';
+import colors from '../../../assets/colors';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.main
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: colors.main,
+  },
+});
 
-export default styles
+export default styles;
