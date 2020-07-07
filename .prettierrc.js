@@ -2,5 +2,15 @@ module.exports = {
   bracketSpacing: false,
   jsxBracketSameLine: true,
   singleQuote: true,
-  trailingComma: 'false'
-};
+  trailingComma: 'none',
+  semi: false
+}
+
+// module.exports = {
+//   printWidth: 160,
+//   parser: 'flow',
+//   semi: false,
+//   singleQuote: true,
+//   bracketSpacing: true,
+//   arrowParens: 'avoid',
+// };
