@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {
   SafeAreaView,
   Image,
@@ -15,44 +16,33 @@ import {Actions} from 'react-native-router-flux'
 import {connect} from 'react-redux'
 
 class Home extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      houses: [],
-      loading: false
-    }
-  }
+  // constructor(props) {
+  //   super(props)
+  //   this.state = {
+  //     houses: [],
+  //     loading: false
+  //   }
+  // }
 
   componentDidMount() {
     // this._initHousesList()
+    this.props.getHouses()
   }
 
-  _initHousesList = async () => {
-    try {
-      this.setState({loading: true})
-      const getHousesRes = await getHouses()
-      const houses = getHousesRes.data.records
-      this.setState({houses: houses, loading: false})
-      // this.setState({houses})
-    } catch (e) {
-      this.setState({loading: false})
-      Alert.alert('Error', 'Ha ocurrido un error')
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (!prevProps.loading && this.props.loading) {
+  //     this._showLoadingAlert()
+  //   }
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.loading && this.props.loading) {
-      this._showLoadingAlert()
-    }
-  }
-
-  _showLoadingAlert = () => {
-    Alert.alert('Atención', 'Loading activado')
-  }
+  // _showLoadingAlert = () => {
+  //   Alert.alert('Atención', 'Loading activado')
+  // }
 
   _onHousePress = house => {
     // Alert.alert('atención', 'casa pulsada')
-    Actions.push('Characters', {house, title: house.nombre})
+    this.props.setSelectedHouse(house)
+    Actions.push('Characters', {title: house.nombre})
   }
 
   _renderItem = ({item}) => (
@@ -61,12 +51,12 @@ class Home extends Component {
   )
 
   render() {
-    const {houses, loading} = this.state
+    const {housesList, loading} = this.props
     console.log('this.props.loading: ', this.props.loading)
 
     return (
       <SafeAreaView style={styles.container}>
-        <Button
+        {/* <Button
           title={'Púlsame para cambiar el valor de loading'}
           onPress={() => this.props.setLoadingSuperficial(!this.props.loading)}
         />
@@ -74,9 +64,9 @@ class Home extends Component {
           animating={this.props.loading}
           tintColor={'white'}
           size={'large'}
-        />
+        /> */}
         <FlatList
-          data={houses}
+          data={housesList}
           keyExtractor={(item, index) => `card-${item.id}`}
           numColumns={2}
           renderItem={this._renderItem}
@@ -84,7 +74,7 @@ class Home extends Component {
             <RefreshControl
               tintColor="white"
               refreshing={loading}
-              onRefresh={this._initHousesList}
+              onRefresh={this.props.getHouses}
               title={'Cargando...'}
               color={'white'}
             />
@@ -93,6 +83,13 @@ class Home extends Component {
       </SafeAreaView>
     )
   }
+}
+
+Home.propTypes = {
+  housesList: PropTypes.arrayOf(PropTypes.object),
+  loading: PropTypes.bool,
+  getHouses: PropTypes.func,
+  setSelectedHouse: PropTypes.func
 }
 
 export default Home
