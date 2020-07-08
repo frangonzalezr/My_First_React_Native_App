@@ -18,11 +18,7 @@ class App extends Component {
         <Router>
           <Stack key="root">
             <Scene key={'Splash'} component={Splash} hideNavBar />
-            <Scene
-              key={'Home'}
-              component={Home}
-              /*title={'Título 1'}*/ hideNavBar
-            />
+            <Scene key={'Home'} component={Home} hideNavBar />
             <Scene
               key={'Characters'}
               component={Characters}

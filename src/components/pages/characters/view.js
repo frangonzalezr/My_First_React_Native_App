@@ -4,13 +4,18 @@ import PropTypes from 'prop-types'
 import styles from './styles'
 
 class Characters extends React.Component {
-    render() {
-        return (
-            <SafeAreaView style={styles.container}>
-                
-            </SafeAreaView>
-        )
-    }
+  componentDidMount() {
+    this.props.getCharacters()
+  }
+
+  render() {
+    console.log('characters this.props: ', this.props)
+    return <SafeAreaView style={styles.container} />
+  }
+}
+
+Characters.propTypes = {
+  getCharacters: PropTypes.func
 }
 
 export default Characters

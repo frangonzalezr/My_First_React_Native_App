@@ -22,20 +22,14 @@ class HouseCard extends React.Component {
 
   _avisarAPapa = () => {
     this.props.onPress(this.props.house)
-    // this.props.setSelectedHouse(house)
   }
 
   render() {
-    console.log('this.props: ', this.props)
     const {house, onPress} = this.props
     const {width, height} = this.state
-    const avisarOOPapa = () => {
-      onPress(house) // onPress es una de las props que recibo de papa junto con house
-    }
     return (
       <TouchableOpacity
-        onPress={this._avisarAPapa} // Forma 3: Con una función de clase
-        // onPress={avisarOOPapa} // Forma 2: Con const dentro del propio render
+        onPress={this._avisarAPapa}
         // onPress={() => onPress(house)} // Forma 1: Pro
       >
         <Image
